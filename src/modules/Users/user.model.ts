@@ -1,14 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Job } from '../Jobs/job.model';
 
 export enum UserRole {
-  USER = 'user',
-  ADMIN = 'admin',
+  USER = 'USER',
+  ADMIN = 'ADMIN',
 }
 
 export enum Gender {
-    MALE = "male",
-    FEMALE = "female",
-    OTHER = "other"
+    MALE = "MALE",
+    FEMALE = "FEMALE",
+    OTHER = "OTHER"
 }
 
 // Cần import vào array Entities của TypeOrmModule.forRoot() ở app.module.ts để nó hoạt động
@@ -58,7 +59,7 @@ export class User {
     name: 'gender',
     type: 'enum',
     enum: Gender,
-    default: Gender.MALE,
+    default: Gender.OTHER,
   })
   gender: Gender;
 
@@ -81,4 +82,7 @@ export class User {
     nullable: true,
   })
   certification: string;
+
+  @OneToMany(() => Job, (job) => job.user)
+  jobs?: Job[]
 }
