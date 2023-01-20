@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Paging } from './dto/find-all.dto';
-import { User } from './user.model';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
@@ -15,6 +15,7 @@ export class UserService {
     try {
       const users = await this.userRepository.find();
       return users;
+      
     } catch (error) {
       throw error;
     }

@@ -1,7 +1,7 @@
 import { Controller } from "@nestjs/common"
 import { JobTypeDetailService } from "./jobTypeDetail.service";
 
-@Controller()
+@Controller('jobTypeDetails')
 export class JobTypeDetailController {
   constructor(private readonly jobTypeDetailService: JobTypeDetailService) {}
 

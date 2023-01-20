@@ -9,33 +9,26 @@ export class Comment {
 
   @Column({
     name: "job_id",
-    nullable: false,
   })
   jobId: number;
 
   @Column({
     name: 'user_id',
-    nullable: false,
   })
   userId: number;
 
   @Column({
     name: 'commented_at',
-    nullable: false,
     type: 'datetime',
     default: () => 'NOW()',
   })
   commented_at: Date;
 
-  @Column({
-    name: 'content',
-    nullable: false,
-  })
+  @Column()
   content: string;
 
   @Column({
     name: 'comment_stars',
-    nullable: false,
   })
   commentStars: number;
 }
