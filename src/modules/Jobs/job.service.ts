@@ -7,7 +7,6 @@ import { Job } from './job.entity';
 export class JobService {
   constructor(
     @InjectRepository(Job)
-    private jobRepository: Repository<Job>,
+    private userRepository: Repository<Job>,
   ) {}
-  
 }

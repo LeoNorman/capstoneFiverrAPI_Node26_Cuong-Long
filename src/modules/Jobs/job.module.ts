@@ -5,9 +5,7 @@ import { Job } from './job.entity';
 import { JobService } from './job.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Job]),
-  ],
+  imports: [TypeOrmModule.forFeature([Job])],
   controllers: [JobController],
   providers: [JobService],
 })

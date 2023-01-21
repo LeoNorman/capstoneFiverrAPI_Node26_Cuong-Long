@@ -1,6 +1,6 @@
 import { Controller, Get, HttpException, Query, Req } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Request } from 'express';
+// import { Request } from 'express';
 import { FindAllQuery, Paging } from './dto/find-all.dto';
 
 @Controller('users')
