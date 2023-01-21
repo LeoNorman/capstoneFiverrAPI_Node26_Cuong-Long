@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Job } from '../Jobs/job.entity';
+import { User } from '../Users/user.entity';
 
 @Entity({
   name: 'comments',
@@ -6,16 +14,6 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 export class Comment {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({
-    name: "job_id",
-  })
-  jobId: number;
-
-  @Column({
-    name: 'user_id',
-  })
-  userId: number;
 
   @Column({
     name: 'commented_at',
@@ -31,4 +29,12 @@ export class Comment {
     name: 'comment_stars',
   })
   commentStars: number;
+
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: 'user_id' })
+  user: User[];
+
+  @ManyToOne(() => Job, (job) => job.id)
+  @JoinColumn({ name: 'job_id' })
+  job: Job;
 }

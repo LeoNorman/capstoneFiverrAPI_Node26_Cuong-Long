@@ -1,9 +1,4 @@
-import { Controller } from "@nestjs/common"
-import { CommentService } from "./comment.service";
+import { Controller } from '@nestjs/common';
 
-@Controller('comments')
-export class CommentController {
-  constructor(private readonly hireJobService: CommentService) {}
-
-
-}
+@Controller('comment')
+export class CommentController {}

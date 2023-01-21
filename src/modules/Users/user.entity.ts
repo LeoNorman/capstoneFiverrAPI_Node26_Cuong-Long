@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Job } from '../Jobs/job.entity';
 
 export enum UserRole {
@@ -7,9 +7,9 @@ export enum UserRole {
 }
 
 export enum Gender {
-    MALE = "MALE",
-    FEMALE = "FEMALE",
-    OTHER = "OTHER"
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  OTHER = 'OTHER',
 }
 
 @Entity({
@@ -22,7 +22,10 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    nullable: false,
+    unique: true,
+  })
   email: string;
 
   @Column()
@@ -63,26 +66,6 @@ export class User {
 
   // Relationships
   // user 1 - n jobs
-  @OneToMany(() => Job, (job) => job.user)
-  jobs: Job[]
-
-  // user 1 - n comments
-  // job 1 - n comments
-  // @ManyToMany(() => Job, (jobs) => jobs.users)
-  // @JoinTable({
-  //   name: 'comments',
-  //   joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-  //   inverseJoinColumn: { name: 'job_id' },
-  // })
-  // jobs: Job[];
-
-  // user 1 - n hireJob
-  // job 1 - n hireJob
-  // @ManyToMany(() => Job, (jobs) => jobs.users)
-  // @JoinTable({
-  //   name: 'hire_job',
-  //   joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-  //   inverseJoinColumn: { name: 'job_id' },
-  // })
-  // jobs: Job[];
+  @OneToMany(() => Job, (job) => job.creater)
+  jobs: Job[];
 }
