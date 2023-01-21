@@ -31,7 +31,9 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   phone: string;
 
   @Column()
