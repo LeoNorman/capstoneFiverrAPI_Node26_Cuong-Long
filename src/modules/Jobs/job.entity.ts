@@ -5,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { JobTypeDetail } from '../JobTypeDetail/job-type-detail.entity';
 import { User } from '../Users/user.entity';
 
 @Entity({
@@ -39,12 +40,16 @@ export class Job {
   })
   jobStar: number;
 
-  @Column({
-    name: 'job_detail_id',
-  })
-  jobDetailId: number;
+  // @Column({
+  //   name: 'job_detail_id',
+  // })
+  // jobDetailId: number;
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'creater_id' })
   creater: User;
+
+  @ManyToOne(() => JobTypeDetail, (jobTypeDetail) => jobTypeDetail.id)
+  @JoinColumn({ name: 'job_detail_id' })
+  jobTypeDetail: JobTypeDetail;
 }
