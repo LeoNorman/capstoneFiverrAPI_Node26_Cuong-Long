@@ -1,5 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
 import { Job } from '../Jobs/job.entity';
+import * as bcrypt from 'bcrypt';
 
 export enum UserRole {
   USER = 'USER',
@@ -23,12 +31,13 @@ export class User {
   name: string;
 
   @Column({
-    nullable: false,
     unique: true,
   })
   email: string;
 
-  @Column()
+  @Column({
+    select: false,
+  })
   password: string;
 
   @Column()
@@ -64,8 +73,13 @@ export class User {
   })
   certification: string;
 
-  // Relationships
-  // user 1 - n jobs
   @OneToMany(() => Job, (job) => job.creater)
   jobs: Job[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  hashPassword(password: string) {
+    const salt = bcrypt.genSaltSync();
+    this.password = bcrypt.hashSync(password || this.password, salt);
+  }
 }

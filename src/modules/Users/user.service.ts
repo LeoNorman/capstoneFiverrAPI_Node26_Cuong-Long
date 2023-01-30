@@ -22,7 +22,7 @@ export class UserService {
     }
   }
 
-  async create(data: CreateUserDto) {
+  async userRegistration(data: CreateUserDto) {
     try {
       const user = await this.userRepository.findOne({
         where: { email: data.email },
@@ -32,18 +32,7 @@ export class UserService {
         throw new BadRequestException('email already existed');
       }
 
-      // Ví dụ trong trường hợp admin thêm user, chỉ cần dùng email, ta cần phải tạo một mật khẩu ngẩu nhiên
-      if (!data.password) {
-        data.password = Math.random().toString(36).substring(2);
-        // Gửi email về cho user mật khẩu này
-        
-        data.password = bcrypt.hashSync(data.password, 10);
-      }
-
-      //hashpass
-      data.password = await bcrypt.hashSync(data.password, 10);
-
-      return await this.userRepository.save(data);
+      return await this.userRepository.save(this.userRepository.create(data));
     } catch (error) {
       throw error;
     }
