@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  ValidationPipe,
   HttpException,
   HttpCode,
   Query,
@@ -24,13 +25,13 @@ export class UserController {
     return this.userService.findAllWithCondition(paging);
   }
 
-  @Post()
+  @Post('/register')
   @HttpCode(201)
-  create(@Body() createUserDto: CreateUserDto) {
-    if (!createUserDto) {
+  async userRegistration(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+    if (!Object.keys(createUserDto).length) {
       throw new BadRequestException('missing user data');
     }
 
-    return this.userService.create(createUserDto);
+    return await this.userService.userRegistration(createUserDto);
   }
 }
