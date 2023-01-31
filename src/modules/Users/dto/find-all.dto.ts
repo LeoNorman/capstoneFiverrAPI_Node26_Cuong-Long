@@ -1,11 +1,13 @@
+import { UserRole } from '../user.entity';
+
 export interface Paging {
-    page: number;
-    pageSize: number;
+  page: number;
+  pageSize: number;
 }
 
 export interface Filter {
-    role: string;
+  role: UserRole;
+  name: string;
 }
 
 export type FindAllQuery = Paging & Filter;
-
