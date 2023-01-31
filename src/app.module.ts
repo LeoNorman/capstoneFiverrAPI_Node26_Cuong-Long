@@ -14,7 +14,6 @@ import { JobTypeDetail } from './modules/JobTypeDetail/job-type-detail.entity';
 import { JobTypeDetailModule } from './modules/JobTypeDetail/job-type-detail.module';
 import { JobType } from './modules/JobTypes/job-type.entity';
 import { JobTypeModule } from './modules/JobTypes/job-type.module';
-
 import { User } from './modules/Users/user.entity';
 import { UserModule } from './modules/Users/user.module';
 
@@ -38,6 +37,24 @@ const AppDataSource = TypeOrmModule.forRootAsync({
     ConfigModule.forRoot({ isGlobal: true }),
     AppDataSource,
     //Internal module: Những cái mình viết
+
+    // MulterModule.register({
+    //   storage: diskStorage({
+    //     destination: (req, file, cb) => {
+    //       cb(
+    //         null,
+    //         req.originalUrl === '/users/register'
+    //           ? './statics/avatar'
+    //           : './statics/upload',
+    //       );
+    //     },
+    //     filename: (req, file, callback) => {
+    //       const prefix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    //       callback(null, `${prefix}-${file.originalname}`);
+    //     },
+    //   }),
+    // }),
+
     UserModule,
     AuthModule,
     HireJobModule,

@@ -1,10 +1,9 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.dto';
-import { Paging } from './dto/find-all.dto';
+import { Filter, Paging } from './dto/find-all.dto';
 import { User } from './user.entity';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -13,10 +12,42 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findAllWithCondition(paging: Paging) {
+  async findAllWithCondition(paging: Paging, filter: Filter) {
     try {
-      const users = await this.userRepository.find();
-      return users;
+      const { page, pageSize } = paging;
+      const { role = '', name = '' } = filter;
+      // const [result, total] = await this.userRepository.findAndCount({
+      //   where: {
+      //     name: Like('%' + name + '%'),
+      //     role,
+      //   },
+      //   take: pageSize || 10,
+      //   skip: (page - 1) * pageSize || 0,
+      // });
+      // return {
+      //   data: result,
+      //   paging: {
+      //     total,
+      //     page: page || 1,
+      //     pageSize: pageSize || 10,
+      //   },
+      // };
+
+      const [users, total] = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.role like :role', { role: `%${role}%` })
+        .andWhere('user.name like :name', { name: `%${name}%` })
+        .skip((page - 1) * pageSize || 0)
+        .take(pageSize || 10)
+        .getManyAndCount();
+      return {
+        data: users,
+        paging: {
+          total,
+          page: page || 1,
+          pageSize: pageSize || 10,
+        },
+      };
     } catch (error) {
       throw error;
     }

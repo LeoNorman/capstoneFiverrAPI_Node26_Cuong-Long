@@ -5,6 +5,7 @@ import {
   OneToMany,
   BeforeInsert,
   BeforeUpdate,
+  AfterInsert,
 } from 'typeorm';
 import { Job } from '../Jobs/job.entity';
 import * as bcrypt from 'bcrypt';
@@ -81,5 +82,10 @@ export class User {
   hashPassword(password: string) {
     const salt = bcrypt.genSaltSync();
     this.password = bcrypt.hashSync(password || this.password, salt);
+  }
+
+  @AfterInsert()
+  deletePassword() {
+    delete this.password;
   }
 }
