@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { PassportStrategy } from '@nestjs/passport';
+import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { User } from 'src/modules/Users/user.entity';
@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 
 interface JwtPayload {
   email: string;
+  password: string;
 }
 
 @Injectable()
@@ -32,3 +33,5 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     return user;
   }
 }
+
+export class jwtAuthGuard extends AuthGuard('jwt') {}

@@ -1,6 +1,10 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.dto';
 import { Filter, Paging } from './dto/find-all.dto';
 import { User } from './user.entity';
@@ -38,14 +42,14 @@ export class UserService {
         .where('user.role like :role', { role: `%${role}%` })
         .andWhere('user.name like :name', { name: `%${name}%` })
         .skip((page - 1) * pageSize || 0)
-        .take(pageSize || 10)
+        .take(pageSize)
         .getManyAndCount();
       return {
         data: users,
         paging: {
           total,
           page: page || 1,
-          pageSize: pageSize || 10,
+          pageSize: pageSize,
         },
       };
     } catch (error) {
@@ -53,7 +57,7 @@ export class UserService {
     }
   }
 
-  async userRegistration(data: CreateUserDto) {
+  async createUser(data: CreateUserDto) {
     try {
       const user = await this.userRepository.findOne({
         where: { email: data.email },
@@ -64,6 +68,30 @@ export class UserService {
       }
 
       return await this.userRepository.save(this.userRepository.create(data));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findOneWithCondition(condition: Record<string, unknown>) {
+    try {
+      const user = await this.userRepository.findOne({ where: condition });
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteUser(id: number) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+      });
+      if (!user) {
+        throw new NotFoundException('user not found');
+      }
+      await this.userRepository.delete(id);
+      return 'user deleted';
     } catch (error) {
       throw error;
     }
