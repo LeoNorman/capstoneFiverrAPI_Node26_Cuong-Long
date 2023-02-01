@@ -9,6 +9,7 @@ import { QueryFailedError, Repository } from 'typeorm';
 import { User } from '../Users/user.entity';
 import { LoginDto } from './dto';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from '../Users/dto';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,23 @@ export class AuthService {
     @InjectRepository(User) private userRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
+
+  async userRegistration(data: CreateUserDto) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { email: data.email },
+      });
+
+      if (user) {
+        throw new BadRequestException('email already existed');
+      }
+
+      return await this.userRepository.save(this.userRepository.create(data));
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async login({ email, password }: LoginDto) {
     try {
       const user = await this.userRepository

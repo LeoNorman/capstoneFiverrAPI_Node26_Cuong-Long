@@ -9,17 +9,7 @@ import {
 } from 'typeorm';
 import { Job } from '../Jobs/job.entity';
 import * as bcrypt from 'bcrypt';
-
-export enum UserRole {
-  USER = 'USER',
-  ADMIN = 'ADMIN',
-}
-
-export enum Gender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE',
-  OTHER = 'OTHER',
-}
+import { Gender, UserRole } from './dto/user.dto';
 
 @Entity({
   name: 'users', // Tên table
@@ -66,7 +56,9 @@ export class User {
   })
   role: UserRole;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   skill: string;
 
   @Column({

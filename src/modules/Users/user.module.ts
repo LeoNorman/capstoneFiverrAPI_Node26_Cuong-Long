@@ -9,12 +9,13 @@ import { UserService } from './user.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
+
     MulterModule.register({
       storage: diskStorage({
         destination: (req, file, cb) => {
           cb(
             null,
-            req.originalUrl === '/users/register'
+            req.originalUrl === '/users/'
               ? './statics/avatar'
               : './statics/upload',
           );
